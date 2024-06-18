@@ -303,12 +303,15 @@ class EmbeddableFieldsVectorIndexMixin(MixinBase):
     """A Mixin for VectorIndex which indexes the results of querysets of EmbeddableFieldsMixin models"""
 
     querysets: ClassVar[Sequence[models.QuerySet]]
+    converter_class: type[EmbeddableFieldsDocumentConverter] = (
+        EmbeddableFieldsDocumentConverter
+    )
 
     def _get_querysets(self) -> Sequence[models.QuerySet]:
         return self.querysets
 
     def get_converter_class(self) -> type[EmbeddableFieldsDocumentConverter]:
-        return EmbeddableFieldsDocumentConverter
+        return self.converter_class
 
     def get_converter(self) -> EmbeddableFieldsDocumentConverter:
         queryset_models = [qs.model for qs in self._get_querysets()]
